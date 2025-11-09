@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinyl Audio Player</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="vinyl-player">
+            <h1>Vinyl Audio Player</h1>
+
+            <div class="turntable">
+                <div class="vinyl-record" id="vinylRecord">
+                    <div class="label"></div>
+                </div>
+                <div class="tonearm"></div>
+            </div>
+
+            <div class="controls">
+                <input type="file" id="audioFile" accept="audio/*">
+
+                <div class="playback-controls">
+                    <button id="playBtn" class="btn-primary">Play</button>
+                    <button id="pauseBtn" class="btn-primary">Pause</button>
+                    <button id="stopBtn" class="btn-primary">Stop</button>
+                </div>
+
+                <div class="rpm-controls">
+                    <h3>RPM Speed</h3>
+                    <button class="rpm-btn" data-rpm="33">33 RPM</button>
+                    <button class="rpm-btn active" data-rpm="45">45 RPM</button>
+                    <button class="rpm-btn" data-rpm="78">78 RPM</button>
+                </div>
+
+                <div class="noise-control">
+                    <label for="noiseLevel">Vinyl Crackle:</label>
+                    <input type="range" id="noiseLevel" min="0" max="100" value="1">
+                    <span id="noiseValue">1%</span>
+                </div>
+
+                <div class="volume-control">
+                    <label for="volume">Volume:</label>
+                    <input type="range" id="volume" min="0" max="100" value="70">
+                    <span id="volumeValue">70%</span>
+                </div>
+
+                <div class="filter-section">
+                    <div class="section-header">
+                        <h3>Tube Amplifier</h3>
+                        <button class="bypass-btn active" id="tubeBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="tubeWarmth">Warmth:</label>
+                        <input type="range" id="tubeWarmth" min="0" max="100" value="50">
+                        <span id="tubeValue">50%</span>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="section-header">
+                        <h3>Vinyl EQ</h3>
+                        <button class="bypass-btn active" id="eqBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="bassEQ">Bass:</label>
+                        <input type="range" id="bassEQ" min="-12" max="12" value="3" step="0.5">
+                        <span id="bassValue">+3 dB</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="midEQ">Mid:</label>
+                        <input type="range" id="midEQ" min="-12" max="12" value="-2" step="0.5">
+                        <span id="midValue">-2 dB</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="trebleEQ">Treble:</label>
+                        <input type="range" id="trebleEQ" min="-12" max="12" value="-4" step="0.5">
+                        <span id="trebleValue">-4 dB</span>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="section-header">
+                        <h3>Vinyl Effects</h3>
+                        <button class="bypass-btn active" id="effectsBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="wowFlutter">Wow & Flutter:</label>
+                        <input type="range" id="wowFlutter" min="0" max="100" value="20">
+                        <span id="wowFlutterValue">20%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="ageing">Aging:</label>
+                        <input type="range" id="ageing" min="0" max="100" value="30">
+                        <span id="ageingValue">30%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
