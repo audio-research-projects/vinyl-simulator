@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin Peaks Audio FX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="audio-processor">
+            <div class="header-section">
+                <h1>Twin Peaks</h1>
+                <div class="subtitle">Audio FX Processor</div>
+            </div>
+
+            <div class="chevron-pattern"></div>
+
+            <div class="controls-wrapper">
+                <input type="file" id="audioFile" accept="audio/*">
+
+                <div class="playback-controls">
+                    <button id="playBtn" class="btn-control">▶ Play</button>
+                    <button id="pauseBtn" class="btn-control">⏸ Pause</button>
+                    <button id="stopBtn" class="btn-control">⏹ Stop</button>
+                </div>
+
+                <div class="effect-section main-effect">
+                    <div class="section-header">
+                        <h3>↓ Slowdown Effect ↓</h3>
+                        <div class="indicator"></div>
+                    </div>
+                    <div class="slider-control">
+                        <label>45 RPM → 33 RPM</label>
+                        <span class="value-display" id="slowdownValue">73.3%</span>
+                    </div>
+                </div>
+
+                <div class="effect-section">
+                    <div class="section-header">
+                        <h3>Black Lodge Reverb</h3>
+                        <button class="bypass-btn active" id="reverbBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="reverbMix">Mix:</label>
+                        <input type="range" id="reverbMix" min="0" max="100" value="40">
+                        <span id="reverbMixValue">40%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="reverbDecay">Decay:</label>
+                        <input type="range" id="reverbDecay" min="0" max="100" value="60">
+                        <span id="reverbDecayValue">60%</span>
+                    </div>
+                </div>
+
+                <div class="effect-section">
+                    <div class="section-header">
+                        <h3>Tape Echo</h3>
+                        <button class="bypass-btn active" id="delayBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="delayTime">Time:</label>
+                        <input type="range" id="delayTime" min="100" max="1000" value="375" step="25">
+                        <span id="delayTimeValue">375ms</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="delayFeedback">Feedback:</label>
+                        <input type="range" id="delayFeedback" min="0" max="90" value="30">
+                        <span id="delayFeedbackValue">30%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="delayMix">Mix:</label>
+                        <input type="range" id="delayMix" min="0" max="100" value="25">
+                        <span id="delayMixValue">25%</span>
+                    </div>
+                </div>
+
+                <div class="effect-section">
+                    <div class="section-header">
+                        <h3>Tube Amplifier</h3>
+                        <button class="bypass-btn active" id="tubeBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="tubeWarmth">Warmth:</label>
+                        <input type="range" id="tubeWarmth" min="0" max="100" value="60">
+                        <span id="tubeValue">60%</span>
+                    </div>
+                </div>
+
+                <div class="effect-section">
+                    <div class="section-header">
+                        <h3>Vinyl EQ</h3>
+                        <button class="bypass-btn active" id="eqBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="bassEQ">Bass:</label>
+                        <input type="range" id="bassEQ" min="-12" max="12" value="4" step="0.5">
+                        <span id="bassValue">+4 dB</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="midEQ">Mid:</label>
+                        <input type="range" id="midEQ" min="-12" max="12" value="-3" step="0.5">
+                        <span id="midValue">-3 dB</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="trebleEQ">Treble:</label>
+                        <input type="range" id="trebleEQ" min="-12" max="12" value="-6" step="0.5">
+                        <span id="trebleValue">-6 dB</span>
+                    </div>
+                </div>
+
+                <div class="effect-section">
+                    <div class="section-header">
+                        <h3>Atmosphere</h3>
+                        <button class="bypass-btn active" id="atmosphereBypass">ON</button>
+                    </div>
+                    <div class="slider-control">
+                        <label for="vinylNoise">Vinyl Crackle:</label>
+                        <input type="range" id="vinylNoise" min="0" max="100" value="15">
+                        <span id="vinylNoiseValue">15%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="darkness">Darkness:</label>
+                        <input type="range" id="darkness" min="0" max="100" value="50">
+                        <span id="darknessValue">50%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label for="wowFlutter">Wow & Flutter:</label>
+                        <input type="range" id="wowFlutter" min="0" max="100" value="35">
+                        <span id="wowFlutterValue">35%</span>
+                    </div>
+                </div>
+
+                <div class="volume-section">
+                    <label for="volume">Master Volume:</label>
+                    <input type="range" id="volume" min="0" max="100" value="70">
+                    <span id="volumeValue">70%</span>
+                </div>
+            </div>
+
+            <div class="chevron-pattern bottom"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
