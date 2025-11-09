@@ -17,6 +17,12 @@ class VinylPlayer {
         this.lowpassFilter = null;
         this.highpassFilter = null;
 
+        // Pitch shifting
+        this.pitchShifter = null;
+
+        // Playback speed (independent from pitch)
+        this.playbackSpeed = 1.0; // 100%
+
         // Wow & Flutter
         this.wowFlutterAmount = 0.2;
         this.wowFlutterInterval = null;
@@ -27,11 +33,16 @@ class VinylPlayer {
 
         // Elements
         this.vinylRecord = document.getElementById('vinylRecord');
+        this.progressIndicator = document.getElementById('progressIndicator');
+        this.tonearm = document.getElementById('tonearm');
         this.audioFileInput = document.getElementById('audioFile');
         this.playBtn = document.getElementById('playBtn');
         this.pauseBtn = document.getElementById('pauseBtn');
         this.stopBtn = document.getElementById('stopBtn');
         this.rpmButtons = document.querySelectorAll('.rpm-btn');
+
+        // Progress tracking
+        this.progressInterval = null;
         this.noiseLevel = document.getElementById('noiseLevel');
         this.noiseValue = document.getElementById('noiseValue');
         this.volumeSlider = document.getElementById('volume');
@@ -61,6 +72,10 @@ class VinylPlayer {
         this.eqEnabled = true;
         this.effectsEnabled = true;
 
+        // Speed control
+        this.playbackSpeedSlider = document.getElementById('playbackSpeed');
+        this.speedValue = document.getElementById('speedValue');
+
         this.init();
     }
 
@@ -74,6 +89,7 @@ class VinylPlayer {
         this.pauseBtn.addEventListener('click', () => this.pause());
         this.stopBtn.addEventListener('click', () => this.stop());
 
+        // RPM buttons
         this.rpmButtons.forEach(btn => {
             btn.addEventListener('click', (e) => this.setRPM(e.target.dataset.rpm));
         });
@@ -127,6 +143,13 @@ class VinylPlayer {
         this.eqBypass.addEventListener('click', () => this.toggleEQBypass());
         this.effectsBypass.addEventListener('click', () => this.toggleEffectsbypass());
 
+        // Playback speed control (vertical slider)
+        this.playbackSpeedSlider.addEventListener('input', (e) => {
+            this.playbackSpeed = e.target.value / 100;
+            this.speedValue.textContent = e.target.value + '%';
+            this.updatePlaybackRate();
+        });
+
         // Set initial volume
         this.audioElement.volume = 0.7;
 
@@ -172,6 +195,11 @@ class VinylPlayer {
         this.highpassFilter = this.audioContext.createBiquadFilter();
         this.highpassFilter.type = 'highpass';
         this.highpassFilter.frequency.value = 30;
+
+        // Create pitch shifter (using detune for approximation)
+        this.pitchShifter = this.audioContext.createBiquadFilter();
+        this.pitchShifter.type = 'allpass';
+        this.pitchShifter.frequency.value = 1000;
 
         // Create main gain node
         this.mainGain = this.audioContext.createGain();
@@ -257,6 +285,7 @@ class VinylPlayer {
         this.startWowFlutter();
         this.vinylRecord.classList.add('spinning');
         this.updateSpinSpeed();
+        this.startProgressTracking();
     }
 
     pause() {
@@ -264,6 +293,7 @@ class VinylPlayer {
         this.stopVinylNoise();
         this.stopWowFlutter();
         this.vinylRecord.classList.remove('spinning');
+        this.stopProgressTracking();
     }
 
     stop() {
@@ -272,8 +302,32 @@ class VinylPlayer {
         this.stopVinylNoise();
         this.stopWowFlutter();
         this.vinylRecord.classList.remove('spinning');
+        this.stopProgressTracking();
+        this.resetProgress();
     }
 
+    startProgressTracking() {
+        this.stopProgressTracking();
+
+        this.progressInterval = setInterval(() => {
+            if (!this.audioElement.paused && this.audioElement.duration) {
+                const progress = this.audioElement.currentTime / this.audioElement.duration;
+                const angle = progress * 360;
+                this.progressIndicator.style.transform = `translate(-50%, 0) rotate(${angle}deg)`;
+            }
+        }, 100);
+    }
+
+    stopProgressTracking() {
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+    }
+
+    resetProgress() {
+        this.progressIndicator.style.transform = 'translate(-50%, 0) rotate(0deg)';
+    }
     setRPM(rpm) {
         this.currentRPM = parseInt(rpm);
 
@@ -281,14 +335,30 @@ class VinylPlayer {
         this.rpmButtons.forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
 
-        // Calculate playback rate
-        // 45 RPM is the standard (1.0x speed)
-        // 33 RPM = slower = 33/45 ≈ 0.733x
-        // 78 RPM = faster = 78/45 ≈ 1.733x
-        this.audioElement.playbackRate = this.currentRPM / this.baseRPM;
+        // Update pitch based on RPM
+        this.updatePitch();
 
         // Update spin speed
         this.updateSpinSpeed();
+    }
+
+    updatePitch() {
+        // Calculate pitch shift based on RPM
+        // RPM affects pitch: 33 RPM = lower pitch, 78 RPM = higher pitch
+        const rateRatio = this.currentRPM / this.baseRPM;
+        const semitones = 12 * Math.log2(rateRatio);
+        const detune = semitones * 100; // cents
+
+        // Apply pitch shift using detune on filters
+        if (this.bassFilter) this.bassFilter.detune.value = detune;
+        if (this.midFilter) this.midFilter.detune.value = detune;
+        if (this.trebleFilter) this.trebleFilter.detune.value = detune;
+    }
+
+    updatePlaybackRate() {
+        // Update playback speed independently from pitch
+        this.audioElement.playbackRate = this.playbackSpeed;
+        this.audioElement.preservesPitch = false;
     }
 
     updateSpinSpeed() {
@@ -361,11 +431,11 @@ class VinylPlayer {
                 // Fast variations (flutter) - around 5-10 Hz
                 const flutterVariation = Math.sin(Date.now() / 100) * 0.001 * this.wowFlutterAmount;
 
-                const baseRate = this.currentRPM / this.baseRPM;
+                const baseRate = (this.currentRPM / this.baseRPM) * this.playbackSpeed;
                 this.audioElement.playbackRate = baseRate + wowVariation + flutterVariation;
             } else {
                 // Reset to base rate when effects are disabled
-                this.audioElement.playbackRate = this.currentRPM / this.baseRPM;
+                this.audioElement.playbackRate = (this.currentRPM / this.baseRPM) * this.playbackSpeed;
             }
         }, 50);
     }
@@ -375,7 +445,7 @@ class VinylPlayer {
             clearInterval(this.wowFlutterInterval);
             this.wowFlutterInterval = null;
             // Reset to base rate
-            this.audioElement.playbackRate = this.currentRPM / this.baseRPM;
+            this.audioElement.playbackRate = (this.currentRPM / this.baseRPM) * this.playbackSpeed;
         }
     }
 

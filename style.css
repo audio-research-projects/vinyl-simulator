@@ -48,12 +48,25 @@ h1 {
 .vinyl-record {
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, #1a1a1a 0%, #000000 70%);
+    background:
+        radial-gradient(circle, transparent 35%, rgba(255,255,255,0.02) 35%, transparent 36%),
+        radial-gradient(circle, transparent 40%, rgba(255,255,255,0.02) 40%, transparent 41%),
+        radial-gradient(circle, transparent 45%, rgba(255,255,255,0.02) 45%, transparent 46%),
+        radial-gradient(circle, transparent 50%, rgba(255,255,255,0.02) 50%, transparent 51%),
+        radial-gradient(circle, transparent 55%, rgba(255,255,255,0.02) 55%, transparent 56%),
+        radial-gradient(circle, transparent 60%, rgba(255,255,255,0.02) 60%, transparent 61%),
+        radial-gradient(circle, transparent 65%, rgba(255,255,255,0.02) 65%, transparent 66%),
+        radial-gradient(circle, transparent 70%, rgba(255,255,255,0.02) 70%, transparent 71%),
+        radial-gradient(circle, transparent 75%, rgba(255,255,255,0.02) 75%, transparent 76%),
+        radial-gradient(circle, transparent 80%, rgba(255,255,255,0.02) 80%, transparent 81%),
+        radial-gradient(circle, transparent 85%, rgba(255,255,255,0.02) 85%, transparent 86%),
+        radial-gradient(circle, #1a1a1a 0%, #000000 70%);
     border-radius: 50%;
     position: relative;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
     transition: transform 0.3s ease;
 }
+
 
 .vinyl-record.spinning {
     animation: spin 2s linear infinite;
@@ -74,36 +87,226 @@ h1 {
     background: radial-gradient(circle, #8b0000 0%, #4a0000 100%);
     border-radius: 50%;
     border: 2px solid #333;
+    z-index: 2;
+}
+
+/* Add text to label for visual reference */
+.label::before {
+    content: '♪';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 24px;
+}
+
+/* Grooves layer for more realistic vinyl appearance */
+.grooves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background:
+        repeating-radial-gradient(
+            circle at center,
+            transparent 0px,
+            transparent 1.5px,
+            rgba(255, 255, 255, 0.01) 1.5px,
+            rgba(255, 255, 255, 0.01) 3px
+        );
+    pointer-events: none;
+}
+
+/* Progress indicator - shows current track position */
+.progress-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 45%;
+    background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(255, 100, 100, 0.6) 20%,
+        rgba(255, 50, 50, 0.8) 100%
+    );
+    transform-origin: top center;
+    transform: translate(-50%, 0) rotate(0deg);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.vinyl-record.spinning .progress-indicator {
+    opacity: 1;
 }
 
 .tonearm {
-    position: absolute;
-    top: 30px;
-    right: 10px;
-    width: 4px;
-    height: 120px;
-    background: linear-gradient(180deg, #999 0%, #666 100%);
-    border-radius: 2px;
-    transform-origin: top center;
-    transform: rotate(-30deg);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    display: none;
 }
 
-.tonearm::after {
-    content: '';
+.main-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.pitch-panel {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border-radius: 12px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid #444;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pitch-panel h3 {
+    color: #ddd;
+    font-size: 1.1em;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    font-weight: 300;
+}
+
+.pitch-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    height: 350px;
+    justify-content: space-between;
+    position: relative;
+}
+
+.pitch-marks {
     position: absolute;
-    bottom: -8px;
-    left: -4px;
+    left: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.mark {
     width: 12px;
-    height: 12px;
-    background: #444;
-    border-radius: 50%;
+    height: 1px;
+    background: #555;
+    position: relative;
+}
+
+.mark.center-mark {
+    width: 18px;
+    height: 2px;
+    background: #888;
+    color: #888;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.mark.center-mark::after {
+    content: '0';
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.vertical-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    writing-mode: vertical-lr;
+    width: 4px;
+    height: 250px;
+    background: #333;
+    outline: none;
+    cursor: pointer;
+    transform: rotate(180deg);
+    border-radius: 2px;
+    border: 1px solid #555;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.8);
+}
+
+.vertical-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 40px;
+    height: 15px;
+    background: linear-gradient(180deg, #666 0%, #444 50%, #222 100%);
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid #000;
+}
+
+.vertical-slider::-moz-range-thumb {
+    width: 40px;
+    height: 15px;
+    background: linear-gradient(180deg, #666 0%, #444 50%, #222 100%);
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid #000;
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.pitch-label {
+    color: #888;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.pitch-label.top {
+    margin-bottom: 10px;
+}
+
+.pitch-label.bottom {
+    margin-top: 10px;
 }
 
 .controls {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .pitch-panel {
+        width: 100%;
+    }
+
+    .pitch-slider-container {
+        flex-direction: row;
+        height: auto;
+        width: 100%;
+    }
+
+    .vertical-slider {
+        writing-mode: horizontal-tb;
+        width: 100%;
+        height: 8px;
+        transform: rotate(0deg);
+    }
 }
 
 #audioFile {
@@ -175,6 +378,7 @@ h1 {
     border-color: #bd8a35;
     color: #1a1a1a;
 }
+
 
 .noise-control,
 .volume-control {

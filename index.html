@@ -13,38 +13,42 @@
 
             <div class="turntable">
                 <div class="vinyl-record" id="vinylRecord">
+                    <div class="grooves"></div>
                     <div class="label"></div>
+                    <div class="progress-indicator" id="progressIndicator"></div>
                 </div>
-                <div class="tonearm"></div>
+                <div class="tonearm" id="tonearm"></div>
             </div>
 
-            <div class="controls">
-                <input type="file" id="audioFile" accept="audio/*">
+            <div class="main-layout">
+                <!-- Left Panel: Main Controls -->
+                <div class="controls">
+                    <input type="file" id="audioFile" accept="audio/*">
 
-                <div class="playback-controls">
-                    <button id="playBtn" class="btn-primary">Play</button>
-                    <button id="pauseBtn" class="btn-primary">Pause</button>
-                    <button id="stopBtn" class="btn-primary">Stop</button>
-                </div>
+                    <div class="playback-controls">
+                        <button id="playBtn" class="btn-primary">Play</button>
+                        <button id="pauseBtn" class="btn-primary">Pause</button>
+                        <button id="stopBtn" class="btn-primary">Stop</button>
+                    </div>
 
-                <div class="rpm-controls">
-                    <h3>RPM Speed</h3>
-                    <button class="rpm-btn" data-rpm="33">33 RPM</button>
-                    <button class="rpm-btn active" data-rpm="45">45 RPM</button>
-                    <button class="rpm-btn" data-rpm="78">78 RPM</button>
-                </div>
+                    <div class="rpm-controls">
+                        <h3>RPM (Pitch)</h3>
+                        <button class="rpm-btn" data-rpm="33">33 RPM</button>
+                        <button class="rpm-btn active" data-rpm="45">45 RPM</button>
+                        <button class="rpm-btn" data-rpm="78">78 RPM</button>
+                    </div>
 
-                <div class="noise-control">
-                    <label for="noiseLevel">Vinyl Crackle:</label>
-                    <input type="range" id="noiseLevel" min="0" max="100" value="1">
-                    <span id="noiseValue">1%</span>
-                </div>
+                    <div class="noise-control">
+                        <label for="noiseLevel">Vinyl Crackle:</label>
+                        <input type="range" id="noiseLevel" min="0" max="100" value="1">
+                        <span id="noiseValue">1%</span>
+                    </div>
 
-                <div class="volume-control">
-                    <label for="volume">Volume:</label>
-                    <input type="range" id="volume" min="0" max="100" value="70">
-                    <span id="volumeValue">70%</span>
-                </div>
+                    <div class="volume-control">
+                        <label for="volume">Volume:</label>
+                        <input type="range" id="volume" min="0" max="100" value="70">
+                        <span id="volumeValue">70%</span>
+                    </div>
 
                 <div class="filter-section">
                     <div class="section-header">
@@ -94,6 +98,27 @@
                         <label for="ageing">Aging:</label>
                         <input type="range" id="ageing" min="0" max="100" value="30">
                         <span id="ageingValue">30%</span>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Right Panel: Speed Control -->
+                <div class="pitch-panel">
+                    <h3>Speed</h3>
+                    <div class="pitch-slider-container">
+                        <div class="pitch-label top">+8</div>
+                        <div class="pitch-marks">
+                            <span class="mark"></span>
+                            <span class="mark"></span>
+                            <span class="mark"></span>
+                            <span class="mark center-mark">0</span>
+                            <span class="mark"></span>
+                            <span class="mark"></span>
+                            <span class="mark"></span>
+                        </div>
+                        <input type="range" id="playbackSpeed" class="vertical-slider"
+                               min="50" max="200" value="100" step="1" orient="vertical">
+                        <div class="pitch-label bottom">-8</div>
                     </div>
                 </div>
             </div>
