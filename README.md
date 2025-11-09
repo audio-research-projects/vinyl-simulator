@@ -34,9 +34,13 @@ A web-based audio player that simulates the experience of playing vinyl records 
 ## Browser Compatibility
 
 Works in all modern browsers that support:
+
 - Web Audio API
 - HTML5 Audio
 - CSS3 Animations
+
+![Demo1](img1.png)
+![Demo2](img2.png)
 
 ## Files
 
