@@ -39,6 +39,10 @@ Works in all modern browsers that support:
 - HTML5 Audio
 - CSS3 Animations
 
+Try at:
+* https://audio-research-projects.github.io/vinyl-simulator
+* https://audio-research-projects.github.io/vinyl-simulator/twin-peaks-fx-simulator/
+
 ![Demo1](img1.png)
 ![Demo2](img2.png)
 
