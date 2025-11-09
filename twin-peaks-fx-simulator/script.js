@@ -90,6 +90,10 @@ class TwinPeaksFX {
         this.wowFlutterValue = document.getElementById('wowFlutterValue');
         this.atmosphereBypass = document.getElementById('atmosphereBypass');
 
+        // Slowdown control
+        this.slowdownRateSlider = document.getElementById('slowdownRate');
+        this.slowdownValue = document.getElementById('slowdownValue');
+
         // Volume
         this.volumeSlider = document.getElementById('volume');
         this.volumeValue = document.getElementById('volumeValue');
@@ -105,7 +109,7 @@ class TwinPeaksFX {
         // Set initial slowdown
         this.audioElement.playbackRate = this.slowdownRate;
         this.audioElement.volume = 0.7;
-        this.noiseGain.gain.value = 0.15;
+        this.noiseGain.gain.value = 0.04; // 4% default
     }
 
     initAudioContext() {
@@ -340,6 +344,14 @@ class TwinPeaksFX {
         });
 
         this.atmosphereBypass.addEventListener('click', () => this.toggleAtmosphereBypass());
+
+        // Slowdown
+        this.slowdownRateSlider.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            this.slowdownValue.textContent = value.toFixed(1) + '%';
+            this.slowdownRate = value / 100;
+            this.audioElement.playbackRate = this.slowdownRate;
+        });
 
         // Volume
         this.volumeSlider.addEventListener('input', (e) => {

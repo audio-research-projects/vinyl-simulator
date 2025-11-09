@@ -311,6 +311,15 @@ h1 {
     font-family: 'Courier New', monospace;
 }
 
+.preset-info {
+    text-align: center;
+    font-size: 0.75em;
+    color: #6a4a4a;
+    margin-top: 8px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
 .volume-section {
     display: flex;
     align-items: center;
